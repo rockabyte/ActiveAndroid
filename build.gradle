@@ -22,6 +22,12 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+task copyJarToLib(type: Copy) {
+    from "$buildDir/libs"
+    into "${project(':app').getProjectDir()}/libs"
+}
+tasks.copyJarToLib.dependsOn(jar, sourcesJar)
+
 artifacts {
     archives sourcesJar
 }
