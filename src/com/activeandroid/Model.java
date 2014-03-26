@@ -61,7 +61,12 @@ public abstract class Model {
 		return mActiveAndroidId;
 	}
 
-	public final void delete() {
+    public void setterActiveAndroidId(Long activeAndroidId) {
+        mActiveAndroidId = activeAndroidId;
+    }
+
+
+    public final void delete() {
 		Cache.openDatabase().delete(mTableInfo.getTableName(), idName+"=?", new String[] { getActiveAndroidId().toString() });
 		Cache.removeEntity(this);
 
