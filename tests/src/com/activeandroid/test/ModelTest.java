@@ -111,7 +111,7 @@ public class ModelTest extends ActiveAndroidTestCase {
 
 		m1.save();
 		m2.save();
-		m3 = Model.load(MockModel.class, m1.getId());
+		m3 = Model.load(MockModel.class, m1.getActiveAndroidId());
 
 		assertEquals(m1.hashCode(), m3.hashCode());
 		assertFalse(m1.hashCode() == m2.hashCode());

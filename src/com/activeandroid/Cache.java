@@ -123,7 +123,7 @@ public final class Cache {
 	}
 
 	public static String getIdentifier(Model entity) {
-		return getIdentifier(entity.getClass(), entity.getId());
+		return getIdentifier(entity.getClass(), entity.getActiveAndroidId());
 	}
 
 	public static synchronized void addEntity(Model entity) {

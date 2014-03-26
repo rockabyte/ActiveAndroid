@@ -40,7 +40,7 @@ public abstract class Model {
 	// PRIVATE MEMBERS
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	private Long mId = null;
+	private Long mActiveAndroidId = null;
 
 	private final TableInfo mTableInfo;
 	private final String idName;
@@ -57,16 +57,16 @@ public abstract class Model {
 	// PUBLIC METHODS
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	public final Long getId() {
-		return mId;
+	public final Long getActiveAndroidId() {
+		return mActiveAndroidId;
 	}
 
 	public final void delete() {
-		Cache.openDatabase().delete(mTableInfo.getTableName(), idName+"=?", new String[] { getId().toString() });
+		Cache.openDatabase().delete(mTableInfo.getTableName(), idName+"=?", new String[] { getActiveAndroidId().toString() });
 		Cache.removeEntity(this);
 
 		Cache.getContext().getContentResolver()
-				.notifyChange(ContentProvider.createUri(mTableInfo.getType(), mId), null);
+				.notifyChange(ContentProvider.createUri(mTableInfo.getType(), mActiveAndroidId), null);
 	}
 
 	public final Long save() {
@@ -135,7 +135,7 @@ public abstract class Model {
 					values.put(fieldName, (byte[]) value);
 				}
 				else if (ReflectionUtils.isModel(fieldType)) {
-					values.put(fieldName, ((Model) value).getId());
+					values.put(fieldName, ((Model) value).getActiveAndroidId());
 				}
 				else if (ReflectionUtils.isSubclassOf(fieldType, Enum.class)) {
 					values.put(fieldName, ((Enum<?>) value).name());
@@ -149,16 +149,16 @@ public abstract class Model {
 			}
 		}
 
-		if (mId == null) {
-			mId = db.insert(mTableInfo.getTableName(), null, values);
+		if (mActiveAndroidId == null) {
+			mActiveAndroidId = db.insert(mTableInfo.getTableName(), null, values);
 		}
 		else {
-			db.update(mTableInfo.getTableName(), values, idName+"=" + mId, null);
+			db.update(mTableInfo.getTableName(), values, idName+"=" + mActiveAndroidId, null);
 		}
 
 		Cache.getContext().getContentResolver()
-				.notifyChange(ContentProvider.createUri(mTableInfo.getType(), mId), null);
-		return mId;
+				.notifyChange(ContentProvider.createUri(mTableInfo.getType(), mActiveAndroidId), null);
+		return mActiveAndroidId;
 	}
 
 	// Convenience methods
@@ -269,7 +269,7 @@ public abstract class Model {
 			}
 		}
 
-		if (mId != null) {
+		if (mActiveAndroidId != null) {
 			Cache.addEntity(this);
 		}
 	}
@@ -279,7 +279,7 @@ public abstract class Model {
 	//////////////////////////////////////////////////////////////////////////////////////
 
 	protected final <T extends Model> List<T> getMany(Class<T> type, String foreignKey) {
-		return new Select().from(type).where(Cache.getTableName(type) + "." + foreignKey + "=?", getId()).execute();
+		return new Select().from(type).where(Cache.getTableName(type) + "." + foreignKey + "=?", getActiveAndroidId()).execute();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -288,15 +288,15 @@ public abstract class Model {
 
 	@Override
 	public String toString() {
-		return mTableInfo.getTableName() + "@" + getId();
+		return mTableInfo.getTableName() + "@" + getActiveAndroidId();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Model && this.mId != null) {
+		if (obj instanceof Model && this.mActiveAndroidId != null) {
 			final Model other = (Model) obj;
 
-			return this.mId.equals(other.mId)							
+			return this.mActiveAndroidId.equals(other.mActiveAndroidId)
 							&& (this.mTableInfo.getTableName().equals(other.mTableInfo.getTableName()));
 		} else {
 			return this == obj;
@@ -306,7 +306,7 @@ public abstract class Model {
 	@Override
 	public int hashCode() {
 		int hash = HASH_PRIME;
-		hash += HASH_PRIME * (mId == null ? super.hashCode() : mId.hashCode()); //if id is null, use Object.hashCode()
+		hash += HASH_PRIME * (mActiveAndroidId == null ? super.hashCode() : mActiveAndroidId.hashCode()); //if id is null, use Object.hashCode()
 		hash += HASH_PRIME * mTableInfo.getTableName().hashCode();
 		return hash; //To change body of generated methods, choose Tools | Templates.
 	}
