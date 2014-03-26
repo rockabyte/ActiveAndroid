@@ -148,7 +148,7 @@ public final class SQLiteUtils {
 		final String name = tableInfo.getColumnName(field);
 		final Column column = field.getAnnotation(Column.class);
 
-        if (field.getName().equals("mId")) {
+        if (field.getName().equals("mActiveAndroidId")) {
             return;
         }
 
@@ -200,7 +200,7 @@ public final class SQLiteUtils {
 		final String name = tableInfo.getColumnName(field);
 		final Column column = field.getAnnotation(Column.class);
 
-        if (field.getName().equals("mId")) {
+        if (field.getName().equals("mActiveAndroidId")) {
             return;
         }
 
