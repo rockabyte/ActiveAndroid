@@ -287,6 +287,16 @@ public abstract class Model {
 		return new Select().from(type).where(Cache.getTableName(type) + "." + foreignKey + "=?", getActiveAndroidId()).execute();
 	}
 
+    /**
+     * Function to be subclassed when needed. Intended to get a database model via refModel.
+     *
+     * @param refModel
+     * @return
+     */
+    protected <T extends Model> T getDBModel(T refModel) {
+        return null;
+    }
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDEN METHODS
 	//////////////////////////////////////////////////////////////////////////////////////
