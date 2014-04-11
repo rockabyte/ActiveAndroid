@@ -65,7 +65,6 @@ public abstract class Model {
         mActiveAndroidId = activeAndroidId;
     }
 
-
     public final void delete() {
 		Cache.openDatabase().delete(mTableInfo.getTableName(), idName+"=?", new String[] { getActiveAndroidId().toString() });
 		Cache.removeEntity(this);
@@ -288,12 +287,11 @@ public abstract class Model {
 	}
 
     /**
-     * Function to be subclassed when needed. Intended to get a database model via refModel.
+     * Function to be subclassed when needed. Intended to get a database model by this reference.
      *
-     * @param refModel
      * @return
      */
-    protected <T extends Model> T getDBModel(T refModel) {
+    public <T extends Model> T getDBModel() {
         return null;
     }
 

@@ -30,10 +30,12 @@ import java.util.Map;
 import android.content.Context;
 
 import com.activeandroid.serializer.CalendarSerializer;
+import com.activeandroid.serializer.KeyValueSerializer;
 import com.activeandroid.serializer.SqlDateSerializer;
 import com.activeandroid.serializer.TypeSerializer;
 import com.activeandroid.serializer.UtilDateSerializer;
 import com.activeandroid.serializer.FileSerializer;
+import com.activeandroid.util.KeyValueMap;
 import com.activeandroid.util.Log;
 import com.activeandroid.util.ReflectionUtils;
 import dalvik.system.DexFile;
@@ -50,6 +52,7 @@ final class ModelInfo {
 			put(java.sql.Date.class, new SqlDateSerializer());
 			put(java.util.Date.class, new UtilDateSerializer());
 			put(java.io.File.class, new FileSerializer());
+            put(KeyValueMap.class, new KeyValueSerializer());
 		}
 	};
 
