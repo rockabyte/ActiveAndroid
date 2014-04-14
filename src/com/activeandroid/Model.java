@@ -295,6 +295,13 @@ public abstract class Model {
         return null;
     }
 
+    /**
+     * Function to be subclassed when needed. Intended to merge data from model with this reference.
+     * @param model
+     */
+    public <T extends Model> boolean merge(T model) { return true; }
+
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDEN METHODS
 	//////////////////////////////////////////////////////////////////////////////////////
