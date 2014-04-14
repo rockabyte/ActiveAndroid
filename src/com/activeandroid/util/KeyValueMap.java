@@ -1,12 +1,13 @@
 package com.activeandroid.util;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by sschlicht on 10.04.14.
  */
-public class KeyValueMap<K,V> {
+public class KeyValueMap<K,V> implements Serializable {
     private Map<K, V> map =
             new HashMap<K, V>();
 

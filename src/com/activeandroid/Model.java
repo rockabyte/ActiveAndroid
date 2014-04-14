@@ -301,6 +301,11 @@ public abstract class Model {
      */
     public <T extends Model> boolean merge(T model) { return true; }
 
+    /**
+     * Function to be subclass when needed. Intended to update the model reference of linked property models.
+     */
+    public void updateReferences() { }
+
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// OVERRIDEN METHODS

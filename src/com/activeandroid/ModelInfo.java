@@ -31,6 +31,8 @@ import android.content.Context;
 
 import com.activeandroid.serializer.CalendarSerializer;
 import com.activeandroid.serializer.KeyValueSerializer;
+import com.activeandroid.serializer.ListSerializer;
+import com.activeandroid.serializer.MapSerializer;
 import com.activeandroid.serializer.SqlDateSerializer;
 import com.activeandroid.serializer.TypeSerializer;
 import com.activeandroid.serializer.UtilDateSerializer;
@@ -53,6 +55,8 @@ final class ModelInfo {
 			put(java.util.Date.class, new UtilDateSerializer());
 			put(java.io.File.class, new FileSerializer());
             put(KeyValueMap.class, new KeyValueSerializer());
+            put(java.util.List.class, new ListSerializer());
+            put(java.util.Map.class, new MapSerializer());
 		}
 	};
 
