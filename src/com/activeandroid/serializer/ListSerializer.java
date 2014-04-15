@@ -30,7 +30,7 @@ public class ListSerializer extends TypeSerializer {
             os.writeObject(data);
 
             return out.toByteArray();
-        } finally {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -44,7 +44,7 @@ public class ListSerializer extends TypeSerializer {
             ByteArrayInputStream in = new ByteArrayInputStream((byte[]) data);
             ObjectInputStream is = new ObjectInputStream(in);
             return (List<?>)is.readObject();
-        } finally {
+        } catch (Exception e) {
             return null;
         }
     }
