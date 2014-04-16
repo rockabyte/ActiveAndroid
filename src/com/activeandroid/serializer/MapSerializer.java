@@ -29,7 +29,7 @@ public class MapSerializer extends TypeSerializer {
             os.writeObject(data);
 
             return out.toByteArray();
-        } finally {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -43,7 +43,7 @@ public class MapSerializer extends TypeSerializer {
             ByteArrayInputStream in = new ByteArrayInputStream((byte[]) data);
             ObjectInputStream is = new ObjectInputStream(in);
             return (Map<?,?>)is.readObject();
-        } finally {
+        } catch (Exception e) {
             return null;
         }
     }
