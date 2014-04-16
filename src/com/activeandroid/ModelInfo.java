@@ -57,6 +57,7 @@ final class ModelInfo {
             put(KeyValueMap.class, new KeyValueSerializer());
             put(java.util.List.class, new ListSerializer());
             put(java.util.Map.class, new MapSerializer());
+            put(java.util.HashMap.class, new MapSerializer());
 		}
 	};
 
