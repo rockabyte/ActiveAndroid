@@ -237,6 +237,8 @@ public final class SQLiteUtils {
 
 		definitions.addAll(createUniqueDefinition(tableInfo));
 
+        Log.d(SQLiteUtils.class.toString(), "createTableDefinition: " + TextUtils.join(", ", definitions));
+        
 		return String.format("CREATE TABLE IF NOT EXISTS %s (%s);", tableInfo.getTableName(),
 				TextUtils.join(", ", definitions));
 	}

@@ -55,6 +55,7 @@ final class ModelInfo {
 			put(java.util.Date.class, new UtilDateSerializer());
 			put(java.io.File.class, new FileSerializer());
             put(KeyValueMap.class, new KeyValueSerializer());
+            put(java.util.ArrayList.class, new ListSerializer());
             put(java.util.List.class, new ListSerializer());
             put(java.util.Map.class, new MapSerializer());
             put(java.util.HashMap.class, new MapSerializer());
