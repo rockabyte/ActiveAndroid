@@ -28,6 +28,7 @@ import com.activeandroid.util.Log;
 import com.activeandroid.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
@@ -283,6 +284,9 @@ public abstract class Model {
 	//////////////////////////////////////////////////////////////////////////////////////
 
 	protected final <T extends Model> List<T> getMany(Class<T> type, String foreignKey) {
+        if(getActiveAndroidId() == null){
+            return new ArrayList<T>();
+        }
 		return new Select().from(type).where(Cache.getTableName(type) + "." + foreignKey + "=?", getActiveAndroidId()).execute();
 	}
 
