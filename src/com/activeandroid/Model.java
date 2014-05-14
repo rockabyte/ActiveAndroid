@@ -291,12 +291,31 @@ public abstract class Model {
 	}
 
     /**
+     * Function to be subclassed when needed. Intended to sync the current model with db.
+     *
+     * @return true if model was found in db
+     */
+    public static <T extends Model> boolean sync(T model) {
+        T syncedModel = new Select().from(model.getClass()).where("ActiveAndroidId = ?", model.getActiveAndroidId()).executeSingle();
+
+        if(syncedModel != null){
+            model = syncedModel;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Function to be subclassed when needed. Intended to get a database model by this reference.
      *
      * @return
      */
     public <T extends Model> T getDBModel() {
-        return null;
+        if(getActiveAndroidId() == null){
+            return null;
+        }
+        return (T) new Select().from(mTableInfo.getType()).where("ActiveAndroidId = ?", getActiveAndroidId()).executeSingle();
     }
 
     /**
