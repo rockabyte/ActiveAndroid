@@ -28,6 +28,7 @@ import com.activeandroid.util.Log;
 import com.activeandroid.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
@@ -66,14 +67,30 @@ public abstract class Model {
     }
 
     public final void delete() {
+        delete(true);
+    }
+
+    public final void delete(boolean sendNotifyChange) {
 		Cache.openDatabase().delete(mTableInfo.getTableName(), idName+"=?", new String[] { getActiveAndroidId().toString() });
 		Cache.removeEntity(this);
 
-		Cache.getContext().getContentResolver()
-				.notifyChange(ContentProvider.createUri(mTableInfo.getType(), mActiveAndroidId), null);
+        if (sendNotifyChange) {
+            Cache.getContext().getContentResolver()
+                    .notifyChange(ContentProvider.createUri(mTableInfo.getType(), mActiveAndroidId), null);
+        }
 	}
 
-	public final Long save() {
+
+    public final Long save() {
+        return save(true);
+    }
+
+    public static final void notifyTableChange(Class<? extends Model> type) {
+        Cache.getContext().getContentResolver()
+                .notifyChange(ContentProvider.createUri(type, null), null);
+    }
+
+    public final Long save(boolean sendNotifyChange) {
 		final SQLiteDatabase db = Cache.openDatabase();
 		final ContentValues values = new ContentValues();
 
@@ -160,17 +177,24 @@ public abstract class Model {
 			db.update(mTableInfo.getTableName(), values, idName+"=" + mActiveAndroidId, null);
 		}
 
-		Cache.getContext().getContentResolver()
-				.notifyChange(ContentProvider.createUri(mTableInfo.getType(), mActiveAndroidId), null);
+        if (sendNotifyChange) {
+            Cache.getContext().getContentResolver()
+                    .notifyChange(ContentProvider.createUri(mTableInfo.getType(), mActiveAndroidId), null);
+        }
 		return mActiveAndroidId;
 	}
 
 	// Convenience methods
 
+
 	public static void delete(Class<? extends Model> type, long id) {
-		TableInfo tableInfo = Cache.getTableInfo(type);
-		new Delete().from(type).where(tableInfo.getIdName()+"=?", id).execute();
+        delete(type, id, true);
 	}
+
+    public static void delete(Class<? extends Model> type, long id, boolean sendNotifyChange) {
+        TableInfo tableInfo = Cache.getTableInfo(type);
+        new Delete().from(type).where(tableInfo.getIdName()+"=?", id).execute(sendNotifyChange);
+    }
 
 	public static <T extends Model> T load(Class<T> type, long id) {
 		TableInfo tableInfo = Cache.getTableInfo(type);
@@ -283,8 +307,27 @@ public abstract class Model {
 	//////////////////////////////////////////////////////////////////////////////////////
 
 	protected final <T extends Model> List<T> getMany(Class<T> type, String foreignKey) {
+        if(getActiveAndroidId() == null){
+            return new ArrayList<T>();
+        }
 		return new Select().from(type).where(Cache.getTableName(type) + "." + foreignKey + "=?", getActiveAndroidId()).execute();
 	}
+
+    /**
+     * Function to be subclassed when needed. Intended to sync the current model with db.
+     *
+     * @return true if model was found in db
+     */
+    public static <T extends Model> boolean sync(T model) {
+        T syncedModel = new Select().from(model.getClass()).where("ActiveAndroidId = ?", model.getActiveAndroidId()).executeSingle();
+
+        if(syncedModel != null){
+            model = syncedModel;
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Function to be subclassed when needed. Intended to get a database model by this reference.
@@ -292,7 +335,10 @@ public abstract class Model {
      * @return
      */
     public <T extends Model> T getDBModel() {
-        return null;
+        if(getActiveAndroidId() == null){
+            return null;
+        }
+        return (T) new Select().from(mTableInfo.getType()).where("ActiveAndroidId = ?", getActiveAndroidId()).executeSingle();
     }
 
     /**
