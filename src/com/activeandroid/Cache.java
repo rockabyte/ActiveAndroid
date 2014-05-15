@@ -85,15 +85,19 @@ public final class Cache {
 	}
 
 	public static synchronized void dispose() {
-		closeDatabase();
+        if(sIsInitialized) {
+            closeDatabase();
 
-		sEntities = null;
-		sModelInfo = null;
-		sDatabaseHelper = null;
+            sEntities = null;
+            sModelInfo = null;
+            sDatabaseHelper = null;
 
-		sIsInitialized = false;
+            sIsInitialized = false;
 
-		Log.v("ActiveAndroid disposed. Call initialize to use library.");
+            Log.v("ActiveAndroid disposed. Call initialize to use library.");
+        }else{
+            Log.i("ActiveAndroid is not initialized. Can't dispose!");
+        }
 	}
 
 	// Database access
@@ -107,7 +111,7 @@ public final class Cache {
 	}
 
 	public static synchronized void closeDatabase() {
-		sDatabaseHelper.close();
+        sDatabaseHelper.close();
 	}
 
 	// Context access
