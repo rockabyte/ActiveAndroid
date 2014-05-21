@@ -27,6 +27,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Column.ConflictAction;
 import com.activeandroid.serializer.TypeSerializer;
 
+import java.io.FileWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -238,9 +239,9 @@ public final class SQLiteUtils {
 		definitions.addAll(createUniqueDefinition(tableInfo));
 
         Log.d(SQLiteUtils.class.toString(), "createTableDefinition: " + TextUtils.join(", ", definitions));
-        
+
 		return String.format("CREATE TABLE IF NOT EXISTS %s (%s);", tableInfo.getTableName(),
-				TextUtils.join(", ", definitions));
+                TextUtils.join(", ", definitions));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -275,7 +276,7 @@ public final class SQLiteUtils {
 		if (!TextUtils.isEmpty(definition)) {
 
 			if (name.equals(tableInfo.getIdName())) {
-				definition.append(" PRIMARY KEY AUTOINCREMENT");
+				definition.append(" PRIMARY KEY AUTOINCREMENT NOT NULL");
 			}else if(column!=null){
 				if (column.length() > -1) {
 					definition.append("(");
