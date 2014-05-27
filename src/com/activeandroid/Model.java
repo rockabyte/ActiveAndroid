@@ -90,6 +90,11 @@ public abstract class Model {
                 .notifyChange(ContentProvider.createUri(type, null), null);
     }
 
+    public final Long update(Long id, boolean sendNotifyChange) {
+        mActiveAndroidId = id;
+        return save(sendNotifyChange);
+    }
+
     public final Long save(boolean sendNotifyChange) {
 		final SQLiteDatabase db = Cache.openDatabase();
 		final ContentValues values = new ContentValues();
