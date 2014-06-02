@@ -151,7 +151,10 @@ public class ContentProvider extends android.content.ContentProvider {
 		uri.append("content://");
 		uri.append(sAuthority);
 		uri.append("/");
-		uri.append(Cache.getTableName(type).toLowerCase());
+
+        if (type.isAssignableFrom(Model.class)){
+            uri.append(Cache.getTableName(type).toLowerCase());
+        }
 
 		if (id != null) {
 			uri.append("/");
