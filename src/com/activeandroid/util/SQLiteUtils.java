@@ -31,6 +31,7 @@ import java.io.FileWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -322,8 +323,9 @@ public final class SQLiteUtils {
 			Constructor<?> entityConstructor = type.getConstructor();
 
 			if (cursor.moveToFirst()) {
+                List<String> columnsOrdered = new ArrayList<String>(Arrays.asList(cursor.getColumnNames()));
 				do {
-					Model entity = Cache.getEntity(type, cursor.getLong(cursor.getColumnIndex(idName)));
+                    Model entity = Cache.getEntity(type, cursor.getLong(columnsOrdered.indexOf(idName)));
 					if (entity == null) {
 						entity = (T) entityConstructor.newInstance();
 					}
