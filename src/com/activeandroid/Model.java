@@ -91,6 +91,11 @@ public abstract class Model {
                 .notifyChange(ContentProvider.createUri(type, null), null);
     }
 
+    public Long updateIdOnly(Long id) {
+        mActiveAndroidId = id;
+        return mActiveAndroidId;
+    }
+
     public Long update(Long id, boolean sendNotifyChange) {
         mActiveAndroidId = id;
         return save(sendNotifyChange);
