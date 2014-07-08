@@ -185,7 +185,12 @@ public abstract class Model {
 			mActiveAndroidId = db.insert(mTableInfo.getTableName(), null, values);
 		}
 		else {
-			db.update(mTableInfo.getTableName(), values, idName+"=" + mActiveAndroidId, null);
+			int count = db.update(mTableInfo.getTableName(), values, idName + " = " + mActiveAndroidId, null);
+
+            // if id wasn't used before, create new entry
+            if (count == 0) {
+                mActiveAndroidId = db.insert(mTableInfo.getTableName(), null, values);
+            }
 		}
 
         if (sendNotifyChange) {
