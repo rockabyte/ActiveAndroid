@@ -29,6 +29,7 @@ import com.activeandroid.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
@@ -88,6 +89,11 @@ public abstract class Model {
     public static final void notifyTableChange(Class<? extends Model> type) {
         Cache.getContext().getContentResolver()
                 .notifyChange(ContentProvider.createUri(type, null), null);
+    }
+
+    public Long updateIdOnly(Long id) {
+        mActiveAndroidId = id;
+        return mActiveAndroidId;
     }
 
     public Long update(Long id, boolean sendNotifyChange) {
@@ -179,7 +185,12 @@ public abstract class Model {
 			mActiveAndroidId = db.insert(mTableInfo.getTableName(), null, values);
 		}
 		else {
-			db.update(mTableInfo.getTableName(), values, idName+"=" + mActiveAndroidId, null);
+			int count = db.update(mTableInfo.getTableName(), values, idName + " = " + mActiveAndroidId, null);
+
+            // if id wasn't used before, create new entry
+            if (count == 0) {
+                mActiveAndroidId = db.insert(mTableInfo.getTableName(), null, values);
+            }
 		}
 
         if (sendNotifyChange) {
@@ -209,10 +220,11 @@ public abstract class Model {
 	// Model population
 
 	public final void loadFromCursor(Cursor cursor) {
+        List<String> columnsOrdered = new ArrayList<String>(Arrays.asList(cursor.getColumnNames()));
 		for (Field field : mTableInfo.getFields()) {
 			final String fieldName = mTableInfo.getColumnName(field);
 			Class<?> fieldType = field.getType();
-			final int columnIndex = cursor.getColumnIndex(fieldName);
+            final int columnIndex = columnsOrdered.indexOf(fieldName);
 
 			if (columnIndex < 0) {
 				continue;
