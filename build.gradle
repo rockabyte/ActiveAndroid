@@ -5,8 +5,6 @@ sourceCompatibility = 1.6
 jar.baseName = 'activeandroid'
 archivesBaseName = 'activeandroid'
 
-project.buildDir = "/Volumes/${rootProject.ramdiskName}/13_AN_Travian_Build_Dir/libs/ActiveAndroid"
-
 sourceSets {
 	main {
 		java {
