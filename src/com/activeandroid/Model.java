@@ -355,7 +355,7 @@ public abstract class Model {
         if(getActiveAndroidId() == null){
             return null;
         }
-        return (T) new Select().from(mTableInfo.getType()).where("ActiveAndroidId = ?", getActiveAndroidId()).executeSingle();
+        return new Select().from(mTableInfo.getType()).where("ActiveAndroidId = ?", getActiveAndroidId()).executeSingle();
     }
 
     /**
