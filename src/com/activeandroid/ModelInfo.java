@@ -142,7 +142,8 @@ final class ModelInfo {
 			while (entries.hasMoreElements()) {
 				paths.add(entries.nextElement());
 			}
-		}
+            dexfile.close();
+        }
 		// Robolectric fallback
 		else {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
