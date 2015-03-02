@@ -121,7 +121,11 @@ public final class From implements Sqlable {
 	}
 
 	public From orderBy(String orderBy) {
-		mOrderBy = orderBy;
+        if (mOrderBy != null) {
+            mOrderBy = mOrderBy + ", " + orderBy;
+        } else {
+            mOrderBy = orderBy;
+        }
 		return this;
 	}
 
