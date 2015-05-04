@@ -205,6 +205,9 @@ final class ModelInfo {
 					mTypeSerializers.put(instance.getDeserializedType(), instance);
 				}
 			}
+            catch (NoClassDefFoundError e) {
+                Log.e("Couldn't find class definition.", e);
+            }
 			catch (ClassNotFoundException e) {
 				Log.e("Couldn't create class.", e);
 			}
