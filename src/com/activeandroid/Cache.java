@@ -17,6 +17,8 @@ package com.activeandroid;
  */
 
 import java.util.Collection;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,6 +44,8 @@ public final class Cache {
 	private static DatabaseHelper sDatabaseHelper;
 
 	private static LruCache<String, Model> sEntities;
+
+	private static Lock sLock = new ReentrantLock();
 
 	private static boolean sIsInitialized = false;
 
@@ -98,6 +102,10 @@ public final class Cache {
         }else{
             Log.i("ActiveAndroid is not initialized. Can't dispose!");
         }
+	}
+
+	public static Lock getLock() {
+		return sLock;
 	}
 
 	// Database access
