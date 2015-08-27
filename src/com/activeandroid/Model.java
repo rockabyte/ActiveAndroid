@@ -226,9 +226,9 @@ public abstract class Model {
 			Class<?> fieldType = field.getType();
             final int columnIndex = columnsOrdered.indexOf(fieldName);
 
-			if (columnIndex < 0) {
-				continue;
-			}
+//			if (columnIndex < 0) {
+//				continue;
+//			}
 
 			field.setAccessible(true);
 
@@ -244,7 +244,7 @@ public abstract class Model {
 				// TODO: Find a smarter way to do this? This if block is necessary because we
 				// can't know the type until runtime.
 				if (columnIsNull) {
-					field = null;
+					value = null;
 				}
 				else if (fieldType.equals(Byte.class) || fieldType.equals(byte.class)) {
 					value = cursor.getInt(columnIndex);
@@ -299,9 +299,7 @@ public abstract class Model {
 				}
 
 				// Set the field value
-				if (value != null) {
-					field.set(this, value);
-				}
+				field.set(this, value);
 			}
 			catch (IllegalArgumentException e) {
 				Log.e(e.getClass().getName(), e);
