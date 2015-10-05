@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 
 import com.activeandroid.serializer.CalendarSerializer;
 import com.activeandroid.serializer.KeyValueSerializer;
@@ -39,6 +40,7 @@ import com.activeandroid.serializer.UtilDateSerializer;
 import com.activeandroid.serializer.FileSerializer;
 import com.activeandroid.util.KeyValueMap;
 import com.activeandroid.util.Log;
+import com.activeandroid.util.MultiDexHelper;
 import com.activeandroid.util.ReflectionUtils;
 import dalvik.system.DexFile;
 
@@ -131,18 +133,26 @@ final class ModelInfo {
 	}
 
 	private void scanForModel(Context context) throws IOException {
+
 		String packageName = context.getPackageName();
 		String sourcePath = context.getApplicationInfo().sourceDir;
 		List<String> paths = new ArrayList<String>();
 
 		if (sourcePath != null && !(new File(sourcePath).isDirectory())) {
-			DexFile dexfile = new DexFile(sourcePath);
-			Enumeration<String> entries = dexfile.entries();
 
-			while (entries.hasMoreElements()) {
-				paths.add(entries.nextElement());
+			try {
+				paths = MultiDexHelper.getAllClasses(context);
+			} catch (PackageManager.NameNotFoundException ex) {
+
 			}
-            dexfile.close();
+
+//			DexFile dexfile = new DexFile(sourcePath);
+//			Enumeration<String> entries = dexfile.entries();
+//
+//			while (entries.hasMoreElements()) {
+//				paths.add(entries.nextElement());
+//			}
+//            dexfile.close();
         }
 		// Robolectric fallback
 		else {
